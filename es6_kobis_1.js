@@ -1,47 +1,132 @@
-// kobis api 연동하여 DHTML 생성
+// kobis 일별 박스 오피스 출력
+function showDailyList(kobis) {
+  // 일별 박스오피스 출력 - 순위, 영화제목, 개봉일, 누적관객수, 누적매출액
+  let showKobis = kobis.boxOfficeResult;
+  let showKobisRankList = kobis.boxOfficeResult.dailyBoxOfficeList;
+  const movieList = `
+      <ul>
+        <li>박스 오피스 타입 - ${showKobis.boxofficeType}</li>
+        <li>박스 오피스 일자 - ${showKobis.showRange}</li>
+      </ul>
+      <table border=1>
+      <tr>
+        <td>순위</td>
+        <td>제목</td>
+        <td>개봉일</td>
+        <td>누적관객수</td>
+        <td>누적매출액</td>  
+      </tr>
+${showKobisRankList
+  .map(
+    movie =>
+      ` 
+    <tr>
+      <td>${movie.rank}</td>
+      <td class="movieName" id="${movie.movieCd}">${movie.movieNm}</td>
+      <td>${movie.openDt}</td>
+      <td>${movie.audiAcc}</td>
+      <td>${movie.salesAcc}</td>
+    </tr>
+  `
+  )
+  .join('\n')}
+</table>
+`;
+  document.querySelector('#kobisContent').innerHTML = movieList;
 
-function execKobis(sdate) {
-  // $.getJSON(url, sussess function); 앞에 $ 붙어 있으니 제이쿼리 라이브러리 사용해야함
+  // 영화 제목 포함 td 클릭하면 영화 코드 alert 출력
+
+  // 1. movieName 클래스 가지고 있는 태그요소 가져오기 ->  배열 형태로 받아오는 구성 ( document.queryselectorAll )
+  // const mlist = document.querySelectorAll('.movieName');
+  // alert(mlist.length);
+
+  // 2. for를 이용하여 요소 반환 후 이벤트 적용  ( 주소 값으로는 이벤트 적용 안된다 : 객체를 반환 받아서 걔한테 이벤트 줘야함 )
+  /*   for (let i = 0; i < mlist.length; i++) {
+    // mlist[i].addEventListener 불가능 ( 주소번지이므로 주소를 통해서 메모리 힙에가서 줘야한다)
+    const item = mlist.item(i);
+    item.addEventListener('click', () => {
+      // alert(item.getAttribute('id'));
+      // 상세 정보를 가지고 있는 API 호출
+      execKobisContent(item.getAttribute('id'));
+    });
+  } */
+
+  document.querySelectorAll('.movieName').forEach(e => {
+    e.addEventListener('click', e => {
+      execKobisContent(e.target.getAttribute('id'));
+      // document.querySelector('table').remove();
+      document.querySelector('table').style.display = 'none';
+      // parent.remove();
+    });
+  });
+}
+
+// kobis API를 연동하여 영화 상세 정보 출력
+function execKobisContent(movieCd) {
   fetch(
-    `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=${sdate}`
+    `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=f5eef3421c602c6cb7ea224104795888&movieCd=${movieCd}`
   )
     .then(response => response.json())
-    .then(kobis => {
-      // 일별 박스오피스 출력 - 순위, 영화제목, 개봉일, 누적관객수, 누적매출액
-      let showKobis = kobis.boxOfficeResult;
-      let showKobisRankList = kobis.boxOfficeResult.dailyBoxOfficeList;
-      const movieList = `
-            <ul>
-              <li>박스 오피스 타입 - ${showKobis.boxofficeType}</li>
-              <li>박스 오피스 일자 - ${showKobis.showRange}</li>
-            </ul>
-            <table border=1>
-            <tr>
-              <td>순위</td>
-              <td>제목</td>
-              <td>개봉일</td>
-              <td>누적관객수</td>
-              <td>누적매출액</td>  
-            </tr>
-      ${showKobisRankList
-        .map(
-          movie =>
-            ` 
-          <tr>
-            <td>${movie.rank}</td>
-            <td>${movie.movieNm}</td>
-            <td>${movie.openDt}</td>
-            <td>${movie.audiAcc}</td>
-            <td>${movie.salesAcc}</td>
-          </tr>
-        `
-        )
-        .join('\n')}
-      </table>
-      `;
-      document.querySelector('#kobisContent').innerHTML = movieList;
-    }); // kobis scope
-  // .catch()
+    .then(showMovieContent);
+  // .then((mcontent) => {showMovieContent(mcontent);}) // showMovieContent애 바로 주면 되는데 중간값 과정 매개변수 줄 이유가 없다 , 똑같은 컨텐츠가 넘어가니까 생략 가능
+}
+
+function showMovieContent(mcontent) {
+  // alert(JSON.stringify(mcontent)); 결과값 출력해보려고
+  // console.log(JSON.stringify(mcontent));
+  // alert(mcontent.movieInfoResult.movieInfo.movieNm);
+  let movieInfo = mcontent.movieInfoResult.movieInfo;
+  let { genres, directors, actors } = movieInfo;
+  let genre = genres.map(genre => genre.genreNm);
+  let director = directors.map(director => director.peopleNm);
+  let actor = actors.slice(0, 10);
+  actor = actor.map(actor => actor.peopleNm);
+
+  /*   let actorArr = [];
+  for (let v of actor) {
+    let { peopleNm } = actor;
+    actorArr.push(peopleNm);
+  } */
+
+  // console.log(actors);
+
+  // for()
+
+  document.querySelector('#kobisContent').insertAdjacentHTML(
+    'beforeend',
+    `
+    <table border=1>
+      <tr>
+        <td>제목</td>
+        <td>장르</td>
+        <td>상영시간</td>  
+        <td>감독</td>
+        <td>출연진</td>
+      </tr>
+      <tr>
+        <td>${movieInfo.movieNm}</td>
+        <td>${genre}</td>
+        <td>${movieInfo.showTm}분</td>
+        <td>${director}</td>
+        <td>${actor}</td>
+      </tr>
+    </table>
+  `
+  );
+}
+
+// kobis API를 연동하여 DHTML 생성
+
+function execKobis(date) {
+  // $.getJSON(url, sussess function); 앞에 $ 붙어 있으니 제이쿼리 라이브러리 사용해야함
+  fetch(
+    `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=${date}`
+  )
+    .then(response => response.json()) // 넘어오는 결과값 중에 json만 필요하다
+    .then(showDailyList) // kobis scope // json 결과값이 kobis로 담긴다 // 받아서 그래도 넘기는 거니까 중간 역할만 하는 거라서 그냥 넘기면 된다 showDailtyList 호출 할 때 어차피 kobis 파라미터 받으니까 문제 없다
+    // .then((kobis) => { showDailyList(kobis); })
+    // .then((kobis) => { showDailyList(kobis, sdate); }) 이렇게 받아오는게 더 있다면 이렇게 작성해야한다
+    .catch(() => console.log('fetch 실패!!!'));
 } // execKobis function
 
 // DOM 객체 생성 후 execKobis 함수 호출
