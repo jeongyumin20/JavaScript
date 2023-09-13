@@ -1,0 +1,96 @@
+<!-- 선생님과 함께 수업한 방식  -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./joinCheck.js"></script>
+  </head>
+  <body>
+    <body>
+      <form name="join_form" method="get" action="#" id="join_form">
+        <fieldset>
+          <legend>회원가입</legend>
+          <p>
+            <label for="u_name">이름</label>
+            <input type="text" id="u_name" />
+            <span class="err_name"></span>
+          </p>
+
+          <p>
+            <label for="u_id">아이디</label>
+            <input type="text" id="u_id" />
+            <button type="button">아이디 중복확인</button>
+            <span class="err_id">* 4~12 글자까지만 입력 가능합니다</span>
+          </p>
+
+          <p>
+            <label for="pwd">비밀번호 </label>
+            <input type="password" id="pwd" />
+            <span class="err_pwd">* 4~12 글자까지만 입력 가능합니다</span>
+          </p>
+
+          <p>
+            <label for="pwd_check">비밀번호 확인 </label>
+            <input type="password" id="pwd_check" />
+            <span class="err_pwd_check"></span>
+          </p>
+
+          <p>
+            <label for="date">생년월일</label>
+            <input type="text" id="date" />
+            <span class="err_date">*ex.19940101 - 8자리로 입력</span>
+          </p>
+
+          <p>
+            <label for="add_search">주소검색 </label>
+            <input type="text" placeholder="우편번호" id="add-search" />
+            <button type="button">주소검색</button>
+          </p>
+
+          <p>
+            <label for="address">주소</label>
+            <label for="address_detail"></label>
+            <input type="text" placeholder="기본주소" id="address" />
+            <input type="text" placeholder="상세주소" id="address_detail" />
+          </p>
+
+          <p>
+            <label for="email">이메일</label>
+            <label for="email_text"></label>
+            <input type="email" id="email_id" /> @
+            <input type="text" id="email_dns" />
+
+            <select name="email_select" id="email_sel">
+              <option value="self">직접입력</option>
+              <option value="naver.com">naver.com</option>
+              <option value="google.com">google.com</option>
+              <option value="hanmail.net">hanmail.net</option>
+              <option value="nate.com">nate.com</option>
+              <option value="kakao.com">kakao.com</option>
+            </select>
+          </p>
+
+          <p>
+            <label for="tel">전화번호 </label>
+            <input type="text" id="tel" />
+            <span class="err_tel">*'-'없이 숫자만 입력</span>
+          </p>
+
+          <p>
+            <input type="checkbox" id="agree_check" />
+            <label for="agree_check">약관 동의</label>
+            <span class="err_check">*필수</span>
+          </p>
+
+          <div class="btn">
+            <button type="button">이전으로</button>
+            <button type="submit" id="btnJoin">회원가입</button>
+          </div>
+        </fieldset>
+      </form>
+    </body>
+  </body>
+</html>
