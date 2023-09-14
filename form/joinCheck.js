@@ -120,9 +120,9 @@ function form_check() {
   // 약관 동의
   if (!agree_check.checked) {
     /*     var err_text = document.querySelector('.err_check');
-    err_text.textContent = '*약관 동의를 체크해주세요';
-    text_color_change();
-    agree_check.focus(); */
+      err_text.textContent = '*약관 동의를 체크해주세요';
+      text_color_change();
+      agree_check.focus(); */
     alert('약관에 동의해주세요!');
     return false;
   }
@@ -148,17 +148,28 @@ function email_check() {
   }
 }
 
+// 주소 검색 - daum API
+function searchAddr() {
+  new daum.Postcode({
+    oncomplete: function (data) {
+      // alert(data.zonecode + data.address);
+      document.getElementById('postalCode').value = data.zonecode;
+      document.getElementById('addr1').value = data.address;
+    },
+  }).open();
+}
+
 // 모두 로딩이 되면 함수 호출해서 사용
 document.addEventListener('DOMContentLoaded', () => {
   // 회원가입 클릭 이벤트 호출
   btnJoin.addEventListener('click', form_check); // 받는 매개인자와 주는 함수 인자도 없으니 생략
-
   email_sel.addEventListener('change', email_check);
+  addr_search.addEventListener('click', searchAddr);
 
   /*   email_address.addEventListener('change', e => {
-    let select_email = e.target.value;
-    email_text.value = select_email;
-  }); */
+      let select_email = e.target.value;
+      email_text.value = select_email;
+    }); */
 
   // btnJoin.addEventListener('click', () => form_check());
 });

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="./style.css" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="./joinCheck.js"></script>
   </head>
   <body>
@@ -45,16 +46,15 @@
           </p>
 
           <p>
-            <label for="add_search">주소검색 </label>
-            <input type="text" placeholder="우편번호" id="add-search" />
-            <button type="button">주소검색</button>
+            <label for="postalCode">주소검색 </label>
+            <input type="text" placeholder="우편번호" id="postalCode" />
+            <button type="button" id="addr_search">주소검색</button>
           </p>
-
           <p>
-            <label for="address">주소</label>
-            <label for="address_detail"></label>
-            <input type="text" placeholder="기본주소" id="address" />
-            <input type="text" placeholder="상세주소" id="address_detail" />
+            <label for="addr1">주소</label>
+            <input type="text" placeholder="기본주소" id="addr1" />
+            <label for="addr2"></label>
+            <input type="text" placeholder="상세주소" id="addr2" />
           </p>
 
           <p>
