@@ -80,5 +80,98 @@ C#은 자바 거의 흡사하게 따라 만든 것 ( 90프로 이상? )
 // 해당 블럭 스코프 영역의 기준으로 블럭이 끝나면 가비지 컬렉터 대상이 된다 ( 함수는 호출이 끝난 뒤 대상 )
 
 /* 
-Hoisting, Closer, Prototype 정의
+Hoisting, Closure, Prototype 정의
+
+
+5. 호이스팅(hoisting)
+es6 나오기 이전에도 존재했지만 조금 달라져서 어떻게 코딩을 해야할까가 중점!
+개념 접근시 원본 단어로 정리하는 것이 좋다 
+
+- 자바스크립트 엔진(인터프리터)이 실행하기 전에(런타임) 변수﹒함수﹒클래스 등을 최상단으로 끌어올리는 작업
+( 아래 변수나 함수 선언하고 호출 위에 있어도 에러 없이 작동하는 이유 )
+
+- ES6 이전에는 변수 ﹒클래스는 호이스팅 작업시 선언과 초기화가 함께 진행되었으나, ES6부터는 선언만 가능해짐
+( 디폴트 값을 주지 못한다 : 데이터 타입이 명시적으로 선언되어 있지 않기 때문에 )
+
+let String name = 'hong'; 이렇게 데이터 타입이 명시적 선언이 되면 가능하지만
+let name = 'hong'; 데이터 타입에 따라 변수의 데이터 타입이 바뀌기 때문에 자바스크립트에서는 선언만 가능
+
+- ES6 기준으로 let﹒const 키워드 등장 
+- var 사용은 되도록 지양, let﹒const 권장 사용시 가독성이 좋고 명확한 프로그래밍 가능 
+
+*/
+
+/* 
+6. var 특징
+- 다른 언어와 코딩 방식(변수 할당 등)의 차이로 디버깅이 어려움 ( 다른 언어는 정수 실수 문자 등 타입 알려달라고 한다 )
+- 코드의 가독성과 유지보수 측면에서 좋지 않음 
+  1)  변수 선언시 키워드가 없어도 사용 가능하므로, 선언인지 재할당인지 구분이 어려움
+      name = '홍길동'; 선언인지 아래에서 값을 바꾸는 것인지 이것만 보면 판단이 어렵다 
+          -> var name = '홍길동';
+  
+  2) 중복 선언이 가능 
+  var person = '홍길동';
+  var person = '홍길순';  
+  console.log(person); // 홍길순 인터프리터 방식으로 가장 마지막 선언의 데이터가 들어간다
+
+  3) 변수﹒ 클래스는 블럭 단위 스코프가 안 됨 // 로컬변수인지 글로벌 변수인지 구분이 불가능
+  var fruit = 'apple'; // 전역
+  { // var 키워드는 {} 의 의미가 없다
+   var fruit = 'orange'; // 로컬 ?
+   console.log(fruit); // orange
+  }
+  console.log(fruit); // orange
+
+  4) 함수 레벨 스코프는 블럭 단위 스코프 지원 된다
+*/
+
+/* 
+7. 프로토타입(Prototype)
+1. NOUM an original or first model of something from which other forms are copied or developed
+2. NOUM someone or something that has the typical qualities of a particular group, kind, etc.
+3. NOUM a first or early example that is used as a model for what comes later
+
+
+- 자바스크립트에서 객체지향적으로 프로그래밍을 하기 위해 
+  프로토타입(자바면 클래스의 한 종류인 인터페이스)이 제공되며, 공통적인 특징, 기능, 상태 등을 저장하여 
+  필요한 객체에게 상속을 통해 적용할 수 있다  : 탕후루 같이 코팅으로 감쳐줌
+
+- 최상위 프로토타입(클래스 : 프로토타입 클래스라고도 한다)은 Object로 생성되는 모든 객체는 
+  상속을 받아 구현된다 
+
+
+strArr = new Array(); 
+strArr = [];  // new Array(); 
+// 클래스인 Array를 찾아서 만들어주고 이걸 [] 이렇게 써도 같은 의미로 동작하니 이렇게 많이 사용한다 
+// 우리가 만든 클래스가 아니라 자바스크립트에서 제공하는 빌트인 객체 // 클래스를 자바스크립트에게 달라해서 array 타입으로 만들고 이걸 strArray가 그 주소를 레퍼런스 
+// 그때 만들어지는 Array 우리가 만들지 않는 자바스크립트 빌트인 객체로 안에 뭐가 들어있는지 알 수 없다 
+// 우리가 class Array {} 이렇게 만들지 않았는데 만들어진것이니 자바스크립트에 있는 걸로 만들어진 것
+// 우리가 만들었으면 {} 이 안에 적으니 알지만 우리가 만들지 않았으니 모르니 msdn보는 거고 그 안에 뭐들었는지 설명해주는게 api
+
+
+class Person = {
+  constructor() {
+    this.name = 'hong';
+    this.age = 20;
+  }
+}
+
+let hong = new Person(); // 생성자 호출 : 변수하나 만들어지는데 new Person 이니까 메모리 힙에 만든다
+// new 붙으면 메모리 힙에 만들어진다 Person 클래스 만들러 갔더니 
+*/
+
+/* 
+8. 클로저 (Closure)
+- 함수에서 사용되는 중첩 함수 정의로 생성되는 블럭 스코프를 
+  통해 내부의 함수 스코프에서 외부의 함수 스코프에 접근 가능하도록 허용하는 것을 의미함
+  
+  function outer() {
+    const a = 1;
+    function inner() {
+      console.log(a);
+    }
+    inner();
+  }
+  outer();
+  // 이 외부환경에서 inner() 호출 불가능하므로 inner() 폐쇄적 환경 
 */
